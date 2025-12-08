@@ -1,0 +1,132 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Recipes - Recipe Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 2em;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 2rem;
+    }
+
+    .recipe-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+
+    .recipe-card:hover {
+        border-color: #d1d5db;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .recipe-card-content {
+        padding: 1.5rem;
+    }
+
+    .recipe-title {
+        font-size: 1.25em;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .recipe-meta {
+        font-size: 0.85em;
+        color: #9ca3af;
+        margin-bottom: 1rem;
+    }
+
+    .recipe-description {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+
+    .recipe-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .recipe-actions .btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .empty-state h2 {
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        font-size: 1.3em;
+    }
+
+    .empty-state p {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Recipes</h1>
+        <a href="{% url 'recipe_create' %}" class="btn btn-primary">New Recipe</a>
+    </div>
+
+    {% if recipes %}
+        <div class="recipe-grid">
+            {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <div class="recipe-card-content">
+                        <div class="recipe-title">{{ recipe.title }}</div>
+                        <div class="recipe-meta">{{ recipe.created_at|date:"M d, Y" }}</div>
+                        <div class="recipe-description">
+                            {% if recipe.description %}
+                                {{ recipe.description|truncatewords:15 }}
+                            {% else %}
+                                <em>No description added</em>
+                            {% endif %}
+                        </div>
+                        <div class="recipe-actions">
+                            <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-primary">View</a>
+                            <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-secondary">Edit</a>
+                            <a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-secondary">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>No recipes yet</h2>
+            <p>Get started by creating your first recipe.</p>
+            <a href="{% url 'recipe_create' %}" class="btn btn-primary">Create Recipe</a>
+        </div>
+    {% endif %}
+{% endblock %}

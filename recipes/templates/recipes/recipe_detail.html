@@ -1,0 +1,155 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}{{ recipe.title }} - Recipe Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recipe-header {
+        background: white;
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .recipe-header h1 {
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+        font-size: 2em;
+        font-weight: 700;
+    }
+
+    .recipe-meta {
+        color: #9ca3af;
+        font-size: 0.9em;
+        margin-bottom: 1.25rem;
+    }
+
+    .recipe-description {
+        color: #6b7280;
+        font-size: 1em;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .recipe-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .ingredients-section {
+        background: white;
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .ingredients-section h2 {
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        font-size: 1.3em;
+        font-weight: 600;
+    }
+
+    .ingredient-list {
+        list-style: none;
+        margin-bottom: 1.5rem;
+    }
+
+    .ingredient-item {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ingredient-item:hover {
+        background: #f3f4f6;
+    }
+
+    .ingredient-info {
+        flex: 1;
+    }
+
+    .ingredient-name {
+        font-weight: 600;
+        color: #1f2937;
+        font-size: 1em;
+    }
+
+    .ingredient-quantity {
+        color: #9ca3af;
+        font-size: 0.9em;
+        margin-top: 0.25rem;
+    }
+
+    .ingredient-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .ingredient-actions .btn {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+
+    .empty-ingredients {
+        color: #9ca3af;
+        font-size: 0.95em;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="recipe-header">
+        <h1>{{ recipe.title }}</h1>
+        <div class="recipe-meta">Updated {{ recipe.updated_at|date:"M d, Y" }}</div>
+        {% if recipe.description %}
+            <div class="recipe-description">{{ recipe.description }}</div>
+        {% endif %}
+        <div class="recipe-actions">
+            <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-secondary">Delete</a>
+            <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Back to Recipes</a>
+        </div>
+    </div>
+
+    <div class="ingredients-section">
+        <h2>Ingredients</h2>
+        {% if recipe.ingredient_set.all %}
+            <ul class="ingredient-list">
+                {% for ingredient in recipe.ingredient_set.all %}
+                    <li class="ingredient-item">
+                        <div class="ingredient-info">
+                            <div class="ingredient-name">{{ ingredient.name }}</div>
+                            {% if ingredient.quantity or ingredient.unit %}
+                                <div class="ingredient-quantity">
+                                    {% if ingredient.quantity and ingredient.unit %}
+                                        {{ ingredient.quantity }} {{ ingredient.unit }}
+                                    {% elif ingredient.quantity %}
+                                        {{ ingredient.quantity }}
+                                    {% elif ingredient.unit %}
+                                        {{ ingredient.unit }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="ingredient-actions">
+                            <a href="{% url 'ingredient_edit' recipe.pk ingredient.pk %}" class="btn btn-secondary">Edit</a>
+                            <a href="{% url 'ingredient_delete' recipe.pk ingredient.pk %}" class="btn btn-secondary">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-ingredients">No ingredients added yet.</p>
+        {% endif %}
+        <a href="{% url 'ingredient_add' recipe.pk %}" class="btn btn-primary">Add Ingredient</a>
+    </div>
+{% endblock %}

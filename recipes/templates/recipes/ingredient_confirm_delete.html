@@ -1,0 +1,140 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Delete Ingredient - Recipe Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .warning-box {
+        max-width: 500px;
+        margin: 3rem auto;
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+    }
+
+    .warning-box h1 {
+        color: #991b1b;
+        margin-bottom: 0.5rem;
+        font-size: 1.5em;
+        font-weight: 700;
+    }
+
+    .warning-box p {
+        color: #7c2d12;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .ingredient-info {
+        background: white;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1.5rem 0;
+        border: 1px solid #fecaca;
+    }
+
+    .ingredient-info strong {
+        color: #1f2937;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .ingredient-details {
+        color: #6b7280;
+        font-size: 0.95em;
+    }
+
+    .warning-notice {
+        background: white;
+        padding: 1rem;
+        border-left: 3px solid #f59e0b;
+        border-radius: 6px;
+        margin: 1.5rem 0;
+        color: #92400e;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .button-group .btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 0.95em;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .btn-danger {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc2626;
+    }
+
+    .btn-cancel {
+        background-color: #f3f4f6;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+    }
+
+    .btn-cancel:hover {
+        background-color: #e5e7eb;
+    }
+
+    .recipe-context {
+        color: #6b7280;
+        font-size: 0.9em;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="warning-box">
+        <h1>Delete Ingredient?</h1>
+        <p class="recipe-context">Recipe: <strong>{{ recipe.title }}</strong></p>
+
+        <div class="ingredient-info">
+            <strong>Ingredient:</strong>
+            <div class="ingredient-details">
+                {% if ingredient.quantity and ingredient.unit %}
+                    {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+                {% elif ingredient.quantity %}
+                    {{ ingredient.quantity }} {{ ingredient.name }}
+                {% elif ingredient.unit %}
+                    {{ ingredient.unit }} {{ ingredient.name }}
+                {% else %}
+                    {{ ingredient.name }}
+                {% endif %}
+            </div>
+        </div>
+
+        <p>
+            This action cannot be undone. The ingredient will be removed from the recipe permanently.
+        </p>
+
+        <div class="warning-notice">
+            Are you sure you want to delete this ingredient?
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit" class="btn btn-danger">
+                    Yes, Delete Ingredient
+                </button>
+                <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

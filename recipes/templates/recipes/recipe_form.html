@@ -1,0 +1,118 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}{% if recipe %}Edit Recipe{% else %}New Recipe{% endif %} - Recipe Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-box {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .form-box h1 {
+        color: #1f2937;
+        margin-bottom: 2rem;
+        font-size: 1.75em;
+        font-weight: 700;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        font-size: 0.95em;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 1em;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
+        color: #1f2937;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #1f2937;
+        box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.1);
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .button-group .btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 0.95em;
+    }
+
+    .required {
+        color: #ef4444;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="form-box">
+        <h1>{% if recipe %}Edit Recipe{% else %}New Recipe{% endif %}</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="title">Recipe Title <span class="required">*</span></label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                    value="{% if recipe %}{{ recipe.title }}{% endif %}"
+                    placeholder="Enter recipe name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Enter recipe description and instructions"
+                >{% if recipe %}{{ recipe.description }}{% endif %}</textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    {% if recipe %}Save Changes{% else %}Create Recipe{% endif %}
+                </button>
+                {% if recipe %}
+                    <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-secondary">Cancel</a>
+                {% else %}
+                    <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Cancel</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+{% endblock %}

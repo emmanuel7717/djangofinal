@@ -1,0 +1,151 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}{% if ingredient %}Edit Ingredient{% else %}Add Ingredient{% endif %} - Recipe Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-box {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .form-box h1 {
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        font-size: 1.75em;
+        font-weight: 700;
+    }
+
+    .recipe-context {
+        background-color: #f9fafb;
+        padding: 1rem;
+        border-left: 3px solid #1f2937;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+        color: #6b7280;
+        font-size: 0.95em;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        font-size: 0.95em;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 1em;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
+        color: #1f2937;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #1f2937;
+        box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.1);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .button-group .btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 0.95em;
+    }
+
+    .hint {
+        font-size: 0.8em;
+        color: #9ca3af;
+        margin-top: 0.25rem;
+    }
+
+    .required {
+        color: #ef4444;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="form-box">
+        <h1>{% if ingredient %}Edit Ingredient{% else %}Add Ingredient{% endif %}</h1>
+
+        <div class="recipe-context">
+            <strong>Recipe:</strong> {{ recipe.title }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Ingredient Name <span class="required">*</span></label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value="{% if ingredient %}{{ ingredient.name }}{% endif %}"
+                    placeholder="e.g., Flour, Sugar, Eggs"
+                >
+                <div class="hint">Required</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input
+                        type="text"
+                        id="quantity"
+                        name="quantity"
+                        value="{% if ingredient %}{{ ingredient.quantity }}{% endif %}"
+                        placeholder="e.g., 2, 1.5, 3/4"
+                    >
+                    <div class="hint">Optional</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="unit">Unit</label>
+                    <input
+                        type="text"
+                        id="unit"
+                        name="unit"
+                        value="{% if ingredient %}{{ ingredient.unit }}{% endif %}"
+                        placeholder="e.g., cups, tbsp"
+                    >
+                    <div class="hint">Optional</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    {% if ingredient %}Save Changes{% else %}Add Ingredient{% endif %}
+                </button>
+                <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
