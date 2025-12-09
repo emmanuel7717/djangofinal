@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Recipe Manager{% endblock %}</title>
+    <title>{% block title %}Django's{% endblock %}</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
+          }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -124,7 +124,7 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="{% url 'recipe_list' %}" class="nav-brand">Recipe Manager</a>
+            <a href="{% url 'recipe_list' %}" class="nav-brand">Django'S`!</a>
             <ul class="nav-links">
                 <li><a href="{% url 'recipe_list' %}">Recipes</a></li>
                 <li><a href="{% url 'recipe_create' %}">New Recipe</a></li>
