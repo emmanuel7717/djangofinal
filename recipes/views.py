@@ -3,13 +3,13 @@ from django.http import JsonResponse
 from django.db.models import Q
 from .models import Recipe, Ingredient
 
-# ==================== RECIPE VIEWS ====================
+# recipew views 
 
 def recipe_list(request):
     """Display all recipes with search"""
     recipes = Recipe.objects.all().order_by('-created_at')
     
-    # Add search functionality
+    # search 
     search_query = request.GET.get('q', '')
     if search_query:
         recipes = recipes.filter(
@@ -81,7 +81,7 @@ def recipe_delete(request, pk):
     
     return render(request, 'recipes/recipe_confirm_delete.html', {'recipe': recipe})
 
-# ==================== INGREDIENT VIEWS ====================
+# INGREDIENT views
 
 def ingredient_add(request, recipe_pk):
     """Add a new ingredient to a recipe"""

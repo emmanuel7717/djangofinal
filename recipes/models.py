@@ -3,10 +3,10 @@ from django.db import models
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    instructions = models.TextField(blank=True, null=True)  # NEW
-    prep_time = models.IntegerField(blank=True, null=True, help_text="Prep time in minutes")  # NEW
-    cook_time = models.IntegerField(blank=True, null=True, help_text="Cook time in minutes")  # NEW
-    servings = models.IntegerField(blank=True, null=True, default=4)  # NEW
+    instructions = models.TextField(blank=True, null=True)  
+    prep_time = models.IntegerField(blank=True, null=True, help_text="Prep time in minutes")  
+    cook_time = models.IntegerField(blank=True, null=True, help_text="Cook time in minutes") 
+    servings = models.IntegerField(blank=True, null=True, default=4) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
