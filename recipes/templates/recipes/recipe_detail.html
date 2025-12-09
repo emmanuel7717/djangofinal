@@ -32,10 +32,27 @@
         margin-bottom: 1.5rem;
     }
 
+    .recipe-info {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #f9fafb;
+        border-radius: 6px;
+    }
+
+    .info-item {
+        color: #6b7280;
+        font-size: 0.95em;
+        font-weight: 500;
+    }
+
     .recipe-actions {
         display: flex;
         gap: 0.75rem;
         flex-wrap: wrap;
+        margin: 10px 10px 20px 10px;
     }
 
     .ingredients-section {
@@ -43,6 +60,7 @@
         padding: 2rem;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
+        margin-bottom: 2rem;
     }
 
     .ingredients-section h2 {
@@ -103,6 +121,26 @@
         font-size: 0.95em;
         margin-bottom: 1.5rem;
     }
+
+    .recipe-instructions {
+        background: white;
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .recipe-instructions h2 {
+        color: #1f2937;
+        margin-bottom: 1rem;
+        font-size: 1.3em;
+        font-weight: 600;
+    }
+
+    .recipe-instructions p {
+        color: #6b7280;
+        line-height: 1.8;
+        white-space: pre-wrap;
+    }
 </style>
 {% endblock %}
 
@@ -113,6 +151,24 @@
         {% if recipe.description %}
             <div class="recipe-description">{{ recipe.description }}</div>
         {% endif %}
+        
+        {% if recipe.prep_time or recipe.cook_time or recipe.servings %}
+            <div class="recipe-info">
+                {% if recipe.servings %}
+                    <span class="info-item"> Servings: {{ recipe.servings }}</span>
+                {% endif %}
+                {% if recipe.prep_time %}
+                    <span class="info-item"> Prep: {{ recipe.prep_time }} min</span>
+                {% endif %}
+                {% if recipe.cook_time %}
+                    <span class="info-item"> Cook: {{ recipe.cook_time }} min</span>
+                {% endif %}
+                {% if recipe.total_time %}
+                    <span class="info-item"> Total: {{ recipe.total_time }} min</span>
+                {% endif %}
+            </div>
+        {% endif %}
+        
         <div class="recipe-actions">
             <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-secondary">Delete</a>
@@ -122,9 +178,9 @@
 
     <div class="ingredients-section">
         <h2>Ingredients</h2>
-        {% if recipe.ingredient_set.all %}
+        {% if recipe.ingredients.all %}
             <ul class="ingredient-list">
-                {% for ingredient in recipe.ingredient_set.all %}
+                {% for ingredient in recipe.ingredients.all %}
                     <li class="ingredient-item">
                         <div class="ingredient-info">
                             <div class="ingredient-name">{{ ingredient.name }}</div>
@@ -152,4 +208,11 @@
         {% endif %}
         <a href="{% url 'ingredient_add' recipe.pk %}" class="btn btn-primary">Add Ingredient</a>
     </div>
+
+    {% if recipe.instructions %}
+        <div class="recipe-instructions">
+            <h2>Instructions</h2>
+            <p>{{ recipe.instructions }}</p>
+        </div>
+    {% endif %}
 {% endblock %}

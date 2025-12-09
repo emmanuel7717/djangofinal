@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Recipe Manager{% endblock %}</title>
+    {% block extra_css %}
     <style>
         * {
             margin: 0;
@@ -56,7 +57,6 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95em;
-            transition: color 0.2s ease;
         }
 
         .nav-links a:hover {
@@ -87,7 +87,6 @@
             font-size: 0.95em;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.2s ease;
             font-weight: 500;
         }
 
@@ -119,8 +118,8 @@
             background-color: #dc2626;
         }
 
-        {% block extra_css %}{% endblock %}
     </style>
+{% endblock %}
 </head>
 <body>
     <nav>
@@ -139,7 +138,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Recipe Manager. All rights reserved.</p>
+        <p>&copy; 2025 Recipe Manager.</p>
     </footer>
 </body>
 </html>

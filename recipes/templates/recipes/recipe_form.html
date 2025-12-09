@@ -5,7 +5,7 @@
 {% block extra_css %}
 <style>
     .form-box {
-        max-width: 600px;
+        max-width: 700px;
         margin: 0 auto;
         background: white;
         padding: 2rem;
@@ -33,6 +33,7 @@
     }
 
     input[type="text"],
+    input[type="number"],
     textarea {
         width: 100%;
         padding: 0.75rem;
@@ -46,15 +47,17 @@
     }
 
     input[type="text"]:focus,
-    textarea:focus {
-        outline: none;
-        border-color: #1f2937;
-        box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.1);
-    }
-
+    input[type="number"]:focus,
+  
     textarea {
         resize: vertical;
-        min-height: 150px;
+        min-height: 120px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
     }
 
     .button-group {
@@ -71,6 +74,12 @@
 
     .required {
         color: #ef4444;
+    }
+
+    .hint {
+        font-size: 0.85em;
+        color: #9ca3af;
+        margin-top: 0.25rem;
     }
 </style>
 {% endblock %}
@@ -90,7 +99,7 @@
                     name="title"
                     required
                     value="{% if recipe %}{{ recipe.title }}{% endif %}"
-                    placeholder="Enter recipe name"
+                    placeholder="e.g., Chocolate Chip Cookies"
                 >
             </div>
 
@@ -99,8 +108,58 @@
                 <textarea
                     id="description"
                     name="description"
-                    placeholder="Enter recipe description and instructions"
+                    placeholder="Brief description of the recipe"
                 >{% if recipe %}{{ recipe.description }}{% endif %}</textarea>
+                <div class="hint">A short summary of your recipe</div>
+            </div>
+
+            <div class="form-group">
+                <label for="instructions">Instructions</label>
+                <textarea
+                    id="instructions"
+                    name="instructions"
+                    placeholder="Step-by-step cooking instructions"
+                    style="min-height: 200px;"
+                >{% if recipe %}{{ recipe.instructions }}{% endif %}</textarea>
+                <div class="hint">Detailed cooking steps</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prep_time">Prep Time (min)</label>
+                    <input
+                        type="number"
+                        id="prep_time"
+                        name="prep_time"
+                        min="0"
+                        value="{% if recipe.prep_time %}{{ recipe.prep_time }}{% endif %}"
+                        placeholder="15"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="cook_time">Cook Time (min)</label>
+                    <input
+                        type="number"
+                        id="cook_time"
+                        name="cook_time"
+                        min="0"
+                        value="{% if recipe.cook_time %}{{ recipe.cook_time }}{% endif %}"
+                        placeholder="30"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="servings">Servings</label>
+                    <input
+                        type="number"
+                        id="servings"
+                        name="servings"
+                        min="1"
+                        value="{% if recipe.servings %}{{ recipe.servings }}{% else %}4{% endif %}"
+                        placeholder="4"
+                    >
+                </div>
             </div>
 
             <div class="button-group">

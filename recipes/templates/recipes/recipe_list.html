@@ -8,13 +8,32 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
     }
 
     .page-header h1 {
         font-size: 2em;
         font-weight: 700;
         color: #1f2937;
+    }
+
+    .search-bar {
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .search-bar input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1em;
+    }
+
+    .search-bar input:focus {
+        outline: none;
+        border-color: #1f2937;
     }
 
     .recipe-grid {
@@ -28,12 +47,6 @@
         border: 1px solid #e5e7eb;
         border-radius: 8px;
         overflow: hidden;
-        transition: all 0.2s ease;
-    }
-
-    .recipe-card:hover {
-        border-color: #d1d5db;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     .recipe-card-content {
@@ -99,6 +112,21 @@
         <a href="{% url 'recipe_create' %}" class="btn btn-primary">New Recipe</a>
     </div>
 
+    <div class="search-bar">
+        <form method="GET" style="display: flex; gap: 0.75rem; width: 100%;">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Search recipes by name, description, or ingredient..." 
+                value="{{ search_query }}"
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+            {% if search_query %}
+                <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
     {% if recipes %}
         <div class="recipe-grid">
             {% for recipe in recipes %}
@@ -124,9 +152,11 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <h2>No recipes yet</h2>
-            <p>Get started by creating your first recipe.</p>
-            <a href="{% url 'recipe_create' %}" class="btn btn-primary">Create Recipe</a>
+            <h2>{% if search_query %}No recipes found{% else %}No recipes yet{% endif %}</h2>
+            <p>{% if search_query %}Try a different search term{% else %}Get started by creating your first recipe{% endif %}</p>
+            {% if not search_query %}
+                <a href="{% url 'recipe_create' %}" class="btn btn-primary">Create Recipe</a>
+            {% endif %}
         </div>
     {% endif %}
 {% endblock %}
